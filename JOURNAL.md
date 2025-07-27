@@ -33,6 +33,7 @@ tasks it should be able to accomplish:
 - voice command it to line follow to a charger and charge
 - follow an autonomous path to another room in my apartment from mine
 - map the terrain and send it back to my computer
+- walk to my bed and wake me up with an alarm, and give me the weather
 - not fall off a table
 
 # Parts
@@ -74,7 +75,73 @@ while looking for variants i also found this cool site to find parts: https://oc
 +4 hours
 ### servos
 
+deciding on coreless and digital for the faster movement and easier programming
 
+out of all options, the Hiwonder HPS-0618SG seems to be only cheap and reasonable option for the legs (58g)
 
-# PCB
+for the joints, the servo choice is less important, and so i'll be getting a much cheaper servo such as https://www.aliexpress.com/item/1005004874510884.html or https://www.aliexpress.com/item/1005008648902414.html (260g)
 
+### battery + power
+
+going with LiPo over Li ion because its simpler and more reliable
+
+planning for 3S (11.1V) 3000mAh LiPo battery, which weighs around 182g
+
+power (60W USB3.0 type-C PD):
+- receptacle: UJ31-CH-3-SMT-TR
+- pd, battery charge, buck control: BQ25798
+- battery protection: BQ77915
+
+### other components
+
+- camera: OV2640 
+- mic: INMP441 
+- time of flight sensor: VL53L0X 
+- imu: gy-87 breakout board
+- touch: TTP223 
+- temp: DS18B20 
+- screen: SSD1309
+
+from parts searching, deciding against these features/parts:
+- encoders, LIDAR, light sensor, coprocessor
+
+PWM driver: PCA9685 
+GPIO expander: MCP23017 
+servo buck converter: MP1584
+3.3V buck converter: AMS1117-3.3
+5V buck converter (might not be needed): LM2940
+motor temperature sensor: DS18B20 
+
+audio:
+- I2S DAC: PCM5102A 
+- amp: MAX98357A 
+- 8Ω 1W speaker: K 20 - 8 OHM
+
+full components parts list:
+
+| Component                                  | Quantity | Notes                                                |
+|--------------------------------------------|----------|------------------------------------------------------|
+| ESP32-S3-WROOM-2-N32R8V                    | 1        | 32MB Flash, 8MB PSRAM, BLE 5.0, UART, camera support |
+| 3S 11.1V 3000mAh LiPo Battery              | 1        | ~182g, main power source                             |
+| USB-C Receptacle (UJ31-CH-3-SMT-TR)        | 1        | USB 3.0 PD input                                     |
+| Battery Charger (BQ25798)                  | 1        | USB-C PD to LiPo charge controller                   |
+| Battery Protection (BQ77915)               | 1        | 3S battery protection                                |
+| Buck Converter (MP1584)                    | 1–2      | For stepping down to servo voltage (6–8.4V)          |
+| 3.3V Regulator (AMS1117-3.3)               | 1        | For ESP32 and logic                                  |
+| 5V Regulator (LM2940)                      | 1        | Optional, if any 5V                                  |
+| Hiwonder HPS-0618SG Servos                 | 4        | Coreless digital, used for legs                      |
+| Generic Digital Servos                     | 4        | For joints, cheaper option                           |
+| PCA9685 PWM Driver                         | 1        | 16-channel servo controller                          |
+| OV2640 Camera Module                       | 1        | For vision, facial detection, line following         |
+| INMP441 Microphone                         | 1        | I2S digital mic for voice control                    |
+| VL53L0X ToF Sensor                         | 1        | For object and cliff detection                       |
+| GY-87 IMU Module                           | 1        | Accelerometer, gyro, magnetometer, barometer         |
+| TTP223 Touch Sensor                        | 1        | Touch detection                                      |
+| DS18B20 Temperature Sensor                 | 1        | For internal or external temperature sensing         |
+| SSD1309 OLED Display                       | 1        | 1.3" or larger, I2C/SPI display                      |
+| PCM5102A I2S DAC                           | 1        | For high-quality audio output                        |
+| MAX98357A I2S Amplifier                    | 1        | Low-power mono amplifier                             |
+| 8Ω 1W Speaker (K 20 - 8 OHM)               | 1        | Audio output                                         |
+| MCP23017 GPIO Expander                     | 1        | I2C GPIO expansion                                   |
+
++4 hours
